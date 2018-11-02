@@ -1,0 +1,86 @@
+# Gopkg.toml example
+#
+# Refer to https://github.com/golang/dep/blob/master/docs/Gopkg.toml.md
+# for detailed Gopkg.toml documentation.
+#
+# required = ["github.com/user/thing/cmd/thing"]
+# ignored = ["github.com/user/project/pkgX", "bitbucket.org/user/project/pkgA/pkgY"]
+#
+# [[constraint]]
+#   name = "github.com/user/project"
+#   version = "1.0.0"
+#
+# [[constraint]]
+#   name = "github.com/user/project2"
+#   branch = "dev"
+#   source = "github.com/myfork/project2"
+#
+# [[override]]
+#   name = "github.com/x/y"
+#   version = "2.4.0"
+#
+# [prune]
+#   non-go = false
+#   go-tests = true
+#   unused-packages = true
+
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/cockroachdb/cmux"
+
+[[constraint]]
+  name = "github.com/go-kit/kit"
+  version = "^0.6.0"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/golang/snappy"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/mwitkow/go-conntrack"
+
+[[constraint]]
+  name = "github.com/oklog/run"
+  version = "1.0.0"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/opentracing-contrib/go-stdlib"
+
+[[constraint]]
+  name = "github.com/opentracing/opentracing-go"
+  version = "1.0.2"
+
+[[constraint]]
+  name = "github.com/prometheus/client_golang"
+  revision = "e637cec7d9c8990247098639ebc6d43dd34ddd49"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/prometheus/common"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/improbable-eng/thanos"
+
+[[constraint]]
+  version = "v2.3.2"
+  name = "github.com/prometheus/prometheus"
+
+[[override]]
+  name = "github.com/prometheus/tsdb"
+  revision = "bd832fc8274e8fe63999ac749daaaff9d881241f"
+
+[[constraint]]
+  branch = "master"
+  name = "golang.org/x/net"
+
+[[constraint]]
+  name = "google.golang.org/grpc"
+  version = "1.16.0"
+
+[prune]
+  go-tests = true
+  unused-packages = true
