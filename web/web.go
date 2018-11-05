@@ -13,8 +13,6 @@ import (
 	"github.com/cockroachdb/cmux"
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
-	"github.com/improbable-eng/thanos/pkg/store"
-	"github.com/improbable-eng/thanos/pkg/store/storepb"
 	conntrack "github.com/mwitkow/go-conntrack"
 	"github.com/opentracing-contrib/go-stdlib/nethttp"
 	opentracing "github.com/opentracing/opentracing-go"
@@ -24,7 +22,6 @@ import (
 	"github.com/prometheus/prometheus/storage"
 	"github.com/prometheus/prometheus/storage/tsdb"
 	"golang.org/x/net/netutil"
-	"google.golang.org/grpc"
 )
 
 var (
@@ -156,16 +153,9 @@ func (h *Handler) Run(ctx context.Context) error {
 		conntrack.TrackWithTracing())
 
 	var (
-		m       = cmux.New(listener)
-		grpcl   = m.Match(cmux.HTTP2HeaderField("content-type", "application/grpc"))
-		httpl   = m.Match(cmux.HTTP1Fast())
-		grpcSrv = grpc.NewServer()
+		m     = cmux.New(listener)
+		httpl = m.Match(cmux.HTTP1Fast())
 	)
-
-	db := h.readyStorage.Get()
-	store := store.NewTSDBStore(log.With(h.logger, "component", "thanos-store"), h.options.Registry, db, nil)
-
-	storepb.RegisterStoreServer(grpcSrv, store)
 
 	operationName := nethttp.OperationNameFunc(func(r *http.Request) string {
 		return fmt.Sprintf("%s %s", r.Method, r.URL.Path)
@@ -186,9 +176,6 @@ func (h *Handler) Run(ctx context.Context) error {
 		errCh <- httpSrv.Serve(httpl)
 	}()
 	go func() {
-		errCh <- grpcSrv.Serve(grpcl)
-	}()
-	go func() {
 		errCh <- m.Serve()
 	}()
 
@@ -197,7 +184,6 @@ func (h *Handler) Run(ctx context.Context) error {
 		return e
 	case <-ctx.Done():
 		httpSrv.Shutdown(ctx)
-		grpcSrv.GracefulStop()
 		return nil
 	}
 }
