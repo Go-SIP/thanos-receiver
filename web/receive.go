@@ -36,13 +36,6 @@ func (h *Handler) receive(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	//for _, t := range wreq.Timeseries {
-	//if err := t.UnmarshalLabels(); err != nil {
-	//http.Error(w, err.Error(), http.StatusBadRequest)
-	//return
-	//}
-	//}
-
 	err = h.receiver.Receive(wreq)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
