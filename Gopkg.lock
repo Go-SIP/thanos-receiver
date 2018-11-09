@@ -79,7 +79,9 @@
   packages = [
     "gogoproto",
     "proto",
-    "protoc-gen-gogo/descriptor"
+    "protoc-gen-gogo/descriptor",
+    "sortkeys",
+    "types"
   ]
   revision = "636bf0302bc95575d69441b25a2603156ffdddf1"
   version = "v1.1.1"
@@ -87,12 +89,14 @@
 [[projects]]
   name = "github.com/golang/protobuf"
   packages = [
+    "jsonpb",
     "proto",
     "protoc-gen-go/descriptor",
     "ptypes",
     "ptypes/any",
     "ptypes/duration",
     "ptypes/empty",
+    "ptypes/struct",
     "ptypes/timestamp"
   ]
   revision = "aa810b61a9c79d51363740d207bb46cf8e620ed5"
@@ -127,6 +131,16 @@
   packages = ["."]
   revision = "c225b8c3b01faf2899099b768856a9e916e5087b"
   version = "v1.2.0"
+
+[[projects]]
+  name = "github.com/grpc-ecosystem/grpc-gateway"
+  packages = [
+    "runtime",
+    "runtime/internal",
+    "utilities"
+  ]
+  revision = "aeab1d96e0f1368d243e2e5f526aa29d495517bb"
+  version = "v1.5.1"
 
 [[projects]]
   name = "github.com/hashicorp/errwrap"
@@ -316,6 +330,7 @@
   packages = [
     "pkg/labels",
     "pkg/value",
+    "prompb",
     "storage",
     "storage/tsdb"
   ]
@@ -528,6 +543,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "bd1ef00c4e0d6967096989451d2ab3762a115fbc3bd96ce43c6fb1eed044687e"
+  inputs-digest = "8936adfbfcd62af27e95c0f455848ee488c1e9b75cd4845366f4893816446811"
   solver-name = "gps-cdcl"
   solver-version = 1

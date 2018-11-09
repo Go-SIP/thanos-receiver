@@ -5,6 +5,7 @@ import (
 	"unsafe"
 
 	"github.com/go-kit/kit/log"
+	"github.com/pkg/errors"
 
 	"github.com/improbable-eng/thanos/pkg/store/prompb"
 	"github.com/prometheus/prometheus/pkg/labels"
@@ -34,45 +35,55 @@ func yoloString(b []byte) string {
 	return *((*string)(unsafe.Pointer(&b)))
 }
 
-func (r *Receiver) Receive(reqBuf []byte) error {
+func (r *Receiver) Receive(wreq *PartialWriteRequest) error {
 	app, err := r.append.Appender()
 	if err != nil {
 		return err
 	}
 
-	ts, err := parseWriteRequest(reqBuf)
-	if err != nil {
-		return err
-	}
-
-	for _, t := range ts {
-		metric := t.LabelSetBytes
-		cacheEntry, ok := r.cache.get(yoloString(metric))
-		if ok {
-			for _, s := range t.Samples {
-				err = app.AddFast(cacheEntry.lset, cacheEntry.ref, s.Timestamp, s.Value)
-				if err != nil {
-					return err
-				}
+	for _, t := range wreq.Timeseries {
+		//l := len(t.LabelBytes[0] )
+		//for i := 1; i < len(t.LabelBytes); i++ {
+		//l += len(t.LabelBytes[i])
+		//}
+		//metric := t.LabelBytes[0]
+		//for i := 1; i < len(t.LabelBytes); i++ {
+		//	metric = append(metric, t.LabelBytes[i]...)
+		//}
+		//cacheEntry, ok := r.cache.get(yoloString(metric))
+		//if ok {
+		//	for _, s := range t.Samples {
+		//		err = app.AddFast(cacheEntry.lset, cacheEntry.ref, s.Timestamp, s.Value)
+		//		if err != nil {
+		//			return err
+		//		}
+		//	}
+		//}
+		//if !ok {
+		err = t.UnmarshalLabels()
+		if err != nil {
+			return errors.Wrap(err, "failed to unmarshal labels")
+		}
+		lset := make(labels.Labels, len(t.Labels))
+		for j := range t.Labels {
+			lset[j] = labels.Label{
+				Name:  t.Labels[j].Name,
+				Value: t.Labels[j].Value,
 			}
 		}
-		if !ok {
-			lset, err := parseLabels(t.LabelSetBytes)
+		//hash := lset.Hash()
+
+		//var ref uint64
+		for _, s := range t.Samples {
+			//ref, err = app.Add(lset, s.Timestamp, s.Value)
+			_, err = app.Add(lset, s.Timestamp, s.Value)
 			if err != nil {
 				return err
 			}
-			hash := lset.Hash()
-
-			var ref uint64
-			for _, s := range t.Samples {
-				ref, err = app.Add(lset, s.Timestamp, s.Value)
-				if err != nil {
-					return err
-				}
-			}
-
-			r.cache.addRef(string(metric), ref, lset, hash)
 		}
+
+		//r.cache.addRef(string(metric), ref, lset, hash)
+		//}
 	}
 
 	if err := app.Commit(); err != nil {
