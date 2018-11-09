@@ -157,7 +157,6 @@ func (b *writeBenchmark) run() {
 		<-cancel
 		return nil
 	}, func(error) {
-		//close(cancel)
 	})
 	go func() {
 		if err := g.Run(); err != nil {
@@ -167,7 +166,7 @@ func (b *writeBenchmark) run() {
 	time.Sleep(5 * time.Second)
 	dur := measureTime("ingestScrapes", func() {
 		b.startProfiling()
-		total, err = b.ingestScrapes(metrics, 3000) //3000)
+		total, err = b.ingestScrapes(metrics, 3000)
 		if err != nil {
 			exitWithError(err)
 		}
@@ -205,7 +204,6 @@ func (b *writeBenchmark) ingestScrapes(lbls [][]prompb.Label, scrapeCount int) (
 			go func() {
 				n, err := b.ingestScrapesShard(batch, 100, int64(timeDelta*i))
 				if err != nil {
-					// exitWithError(err)
 					fmt.Println(" err", err)
 				}
 				mu.Lock()
