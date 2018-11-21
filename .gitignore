@@ -1,4 +1,6 @@
 thanos-remote-receive
 main
-benchout
-data
+benchout/
+data/
+data-receiver-1/
+data-receiver-2/

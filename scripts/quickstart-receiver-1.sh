@@ -2,6 +2,7 @@
 set -x
 
 ./thanos-remote-receive receiver \
+    --tsdb.path                 data-receiver-1 \
     --debug.name                receiver-1 \
     --grpc-address              0.0.0.0:19091 \
     --http-address              0.0.0.0:19191 \
