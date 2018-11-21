@@ -30,7 +30,10 @@ import (
 func RegisterReceiver(m map[string]setupFunc, app *kingpin.Application, name string) {
 	cmd := app.Command(name, "receiver to accept remote write API requests.")
 
-	grpcBindAddr, httpBindAddr, cert, key, clientCA, newPeerFn := regCommonServerFlags(cmd)
+	grpcBindAddr, httpMetricsBindAddr, cert, key, clientCA, newPeerFn := regCommonServerFlags(cmd)
+
+	remoteWriteAddress := cmd.Flag("remote-write.address", "Address to listen on for remote write requests.").
+		Default("0.0.0.0:19291").String()
 
 	dataDir := cmd.Flag("tsdb.path", "Data directory of TSDB.").
 		Default("./data").String()
@@ -49,7 +52,8 @@ func RegisterReceiver(m map[string]setupFunc, app *kingpin.Application, name str
 			*cert,
 			*key,
 			*clientCA,
-			*httpBindAddr,
+			*httpMetricsBindAddr,
+			*remoteWriteAddress,
 			*dataDir,
 			peer,
 			name,
@@ -66,7 +70,8 @@ func RunReceiver(
 	cert string,
 	key string,
 	clientCA string,
-	httpBindAddr string,
+	httpMetricsBindAddr string,
+	remoteWriteAddress string,
 	dataDir string,
 	peer *cluster.Peer,
 	component string,
@@ -93,7 +98,7 @@ func RunReceiver(
 	webHandler := web.New(log.With(logger, "component", "web"), &web.Options{
 		Context:        ctxWeb,
 		Receiver:       receiver,
-		ListenAddress:  ":19090",
+		ListenAddress:  remoteWriteAddress,
 		MaxConnections: 1000,
 		ReadTimeout:    time.Minute * 5,
 		Registry:       reg,
@@ -208,7 +213,7 @@ func RunReceiver(
 	}
 
 	level.Debug(logger).Log("msg", "setting up metric http listen-group")
-	if err := metricHTTPListenGroup(g, logger, reg, httpBindAddr); err != nil {
+	if err := metricHTTPListenGroup(g, logger, reg, httpMetricsBindAddr); err != nil {
 		level.Debug(logger).Log("msg", "metric listener errored", "err", err)
 		return err
 	}

@@ -8,4 +8,5 @@ set -x
     --cluster.address           0.0.0.0:19391 \
     --cluster.advertise-address 127.0.0.1:19391 \
     --cluster.peers             127.0.0.1:19391 \
+    --remote-write.address      0.0.0.0:19291 \
     --log.level=debug
