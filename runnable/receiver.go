@@ -8,8 +8,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/brancz/thanos-remote-receive/receive"
-	"github.com/brancz/thanos-remote-receive/web"
+	"github.com/Go-SIP/thanos-receiver/receive"
+	"github.com/Go-SIP/thanos-receiver/web"
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
 	"github.com/improbable-eng/thanos/pkg/cluster"

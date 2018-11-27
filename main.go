@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/brancz/thanos-remote-receive/runnable"
+	"github.com/Go-SIP/thanos-receiver/runnable"
 )
 
 func main() {

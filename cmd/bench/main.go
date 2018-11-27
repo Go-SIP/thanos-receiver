@@ -31,7 +31,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/brancz/thanos-remote-receive/runnable"
+	"github.com/Go-SIP/thanos-receiver/runnable"
 	"github.com/go-kit/kit/log"
 	"github.com/golang/snappy"
 	"github.com/improbable-eng/thanos/pkg/cluster"

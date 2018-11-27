@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"runtime/debug"
 
-	"github.com/brancz/thanos-remote-receive/receive"
+	"github.com/Go-SIP/thanos-receiver/receive"
 	"github.com/golang/snappy"
 )
 

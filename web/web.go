@@ -9,7 +9,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/brancz/thanos-remote-receive/receive"
+	"github.com/Go-SIP/thanos-receiver/receive"
 	"github.com/cockroachdb/cmux"
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
