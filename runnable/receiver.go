@@ -73,7 +73,7 @@ func RunReceiver(
 	httpMetricsBindAddr string,
 	remoteWriteAddress string,
 	dataDir string,
-	peer *cluster.Peer,
+	peer cluster.Peer,
 	component string,
 ) error {
 	level.Info(logger).Log("msg", "setting up receiver")
@@ -86,10 +86,10 @@ func RunReceiver(
 	}
 
 	tsdbCfg := &tsdb.Options{
-		Retention:        model.Duration(time.Hour * 24 * 15),
+		Retention:        model.Duration(time.Minute * 6),
 		NoLockfile:       true,
-		MinBlockDuration: model.Duration(time.Hour * 2),
-		MaxBlockDuration: model.Duration(time.Hour * 2),
+		MinBlockDuration: model.Duration(time.Minute * 3),
+		MaxBlockDuration: model.Duration(time.Minute * 3),
 	}
 
 	ctxWeb, cancelWeb := context.WithCancel(context.Background())

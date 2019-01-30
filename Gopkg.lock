@@ -200,7 +200,7 @@
     "pkg/strutil",
     "pkg/tracing"
   ]
-  revision = "4980e85d716a4872b1d36fd5b08d3112b5fdae4f"
+  revision = "5e5e353e2c30dfff9e4504d7a4d884cf39118316"
 
 [[projects]]
   name = "github.com/julienschmidt/httprouter"
@@ -334,8 +334,8 @@
     "storage",
     "storage/tsdb"
   ]
-  revision = "167a4b4e73a8eca8df648d2d2043e21bdb9a7449"
-  version = "v2.4.3"
+  revision = "a2ef8cf2f509b58d140acf9e37f1e906b28582cd"
+  version = "v2.7.0"
 
 [[projects]]
   name = "github.com/prometheus/tsdb"
@@ -347,7 +347,7 @@
     "index",
     "labels"
   ]
-  revision = "bd832fc8274e8fe63999ac749daaaff9d881241f"
+  revision = "eb5034d5b0c54651beee345590b17a1040d67f9c"
 
 [[projects]]
   branch = "master"
