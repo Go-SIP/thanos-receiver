@@ -86,10 +86,10 @@ func RunReceiver(
 	}
 
 	tsdbCfg := &tsdb.Options{
-		Retention:        model.Duration(time.Minute * 6),
-		NoLockfile:       true,
-		MinBlockDuration: model.Duration(time.Minute * 3),
-		MaxBlockDuration: model.Duration(time.Minute * 3),
+		RetentionDuration: model.Duration(time.Hour * 24 * 15),
+		NoLockfile:        true,
+		MinBlockDuration:  model.Duration(time.Hour * 2),
+		MaxBlockDuration:  model.Duration(time.Hour * 2),
 	}
 
 	ctxWeb, cancelWeb := context.WithCancel(context.Background())
