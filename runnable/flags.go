@@ -23,7 +23,7 @@ func regCommonServerFlags(cmd *kingpin.CmdClause) (
 	grpcTLSSrvCert *string,
 	grpcTLSSrvKey *string,
 	grpcTLSSrvClientCA *string,
-	peerFunc func(log.Logger, *prometheus.Registry, bool, string, bool) (*cluster.Peer, error)) {
+	peerFunc func(log.Logger, *prometheus.Registry, bool, string, bool) (cluster.Peer, error)) {
 
 	grpcBindAddr = cmd.Flag("grpc-address", "Listen ip:port address for gRPC endpoints (StoreAPI). Make sure this address is routable from other components if you use gossip, 'grpc-advertise-address' is empty and you require cross-node connection.").
 		Default("0.0.0.0:10901").String()
@@ -68,7 +68,7 @@ func regCommonServerFlags(cmd *kingpin.CmdClause) (
 		grpcTLSSrvCert,
 		grpcTLSSrvKey,
 		grpcTLSSrvClientCA,
-		func(logger log.Logger, reg *prometheus.Registry, waitIfEmpty bool, httpAdvertiseAddr string, queryAPIEnabled bool) (*cluster.Peer, error) {
+		func(logger log.Logger, reg *prometheus.Registry, waitIfEmpty bool, httpAdvertiseAddr string, queryAPIEnabled bool) (cluster.Peer, error) {
 			host, port, err := cluster.CalculateAdvertiseAddress(*grpcBindAddr, *grpcAdvertiseAddr)
 			if err != nil {
 				return nil, errors.Wrapf(err, "calculate advertise StoreAPI addr for gossip based on bindAddr: %s and advAddr: %s", *grpcBindAddr, *grpcAdvertiseAddr)
